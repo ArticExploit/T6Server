@@ -72,6 +72,8 @@ installGameBinaries () {
 
         # Clean up downloaded files
         rm -rf /tmp/binaries.tar
+        rm -rf /tmp/zone
+        rm -rf /tmp/binkw32.dll
 
         # Create symbolic links
         for dir in Zombie Multiplayer; do
