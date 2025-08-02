@@ -57,9 +57,7 @@ installGameBinaries () {
 
         # Clean up T6ServerConfigs
         rm -rf /tmp/T6ServerConfigs
-
-        # Download required files from torrent
-        checkAndInstallCommand "aria2c" "aria2"
+        
         # Clean up any existing pluto_t6_full_game files/directories in /tmp
         rm -rf /tmp/pluto_t6_full_game*
         (pgrep transmission-daemon >/dev/null || transmission-daemon) && transmission-remote -a "$WORKDIR/Resources/sources/pluto_t6_full_game.torrent" -w /tmp && TORRENT_ID=$(transmission-remote -l | awk 'NR==2{print $1}') && FILE_IDS=$(transmission-remote -t $TORRENT_ID -f | grep -E "zone/|binkw32.dll" | awk -F: '{print $1}' | tr '\n' ',' | sed 's/,$//') && transmission-remote -t $TORRENT_ID -G && transmission-remote -t $TORRENT_ID -g "$FILE_IDS" && transmission-remote -t $TORRENT_ID -s
