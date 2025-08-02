@@ -67,11 +67,10 @@ installGameBinaries () {
 
         # Move downloaded files to Resources
         mkdir -p "$WORKDIR/Resources/binaries"
-        rsync -a "/tmp/binaries/zone" "$WORKDIR/Resources/binaries/"
-        rsync -a "/tmp/binaries/binkw32.dll" "$WORKDIR/Resources/binaries/binkw32.dll"
+        rsync -a "/tmp/zone" "$WORKDIR/Resources/binaries/"
+        rsync -a "/tmp/binkw32.dll" "$WORKDIR/Resources/binaries/binkw32.dll"
 
         # Clean up downloaded files
-        rm -rf /tmp/binaries
         rm -rf /tmp/binaries.tar
 
         # Create symbolic links
