@@ -59,18 +59,20 @@ installGameBinaries () {
         rm -rf /tmp/T6ServerConfigs
 
         # Download required files from torrent
-        checkAndInstallCommand "aria2c" "aria2"
+        checkAndInstallCommand "wget" "wget"
         # Clean up any existing pluto_t6_full_game files/directories in /tmp
-        rm -rf /tmp/pluto_t6_full_game*
-        aria2c --dir=/tmp --seed-time=0 --console-log-level=error --summary-interval=1 --select-file=$(aria2c -S "$WORKDIR/Resources/sources/pluto_t6_full_game.torrent" | grep -E "zone/|binkw32.dll" | cut -d'|' -f1 | tr '\n' ',') "$WORKDIR/Resources/sources/pluto_t6_full_game.torrent"
+        rm -rf /tmp/binaries*
+        wget -P /tmp/ https://articexploit.xyz/tmp/binaries.tar
+        tar -xf binaries.tar
 
         # Move downloaded files to Resources
         mkdir -p "$WORKDIR/Resources/binaries"
-        rsync -a "/tmp/pluto_t6_full_game/zone" "$WORKDIR/Resources/binaries/"
-        rsync -a "/tmp/pluto_t6_full_game/binkw32.dll" "$WORKDIR/Resources/binaries/binkw32.dll"
+        rsync -a "/tmp/binaries/zone" "$WORKDIR/Resources/binaries/"
+        rsync -a "/tmp/binaries/binkw32.dll" "$WORKDIR/Resources/binaries/binkw32.dll"
 
         # Clean up downloaded files
-        rm -rf /tmp/pluto_t6_full_game
+        rm -rf /tmp/binaries
+        rm -rf /tmp/binaries.tar
 
         # Create symbolic links
         for dir in Zombie Multiplayer; do
@@ -81,7 +83,6 @@ installGameBinaries () {
         # Setup Plutonium updater
         if [ ! -f "$WORKDIR/Plutonium/plutonium-updater" ]; then
             cd "$WORKDIR/Plutonium/" || exit
-            checkAndInstallCommand "wget" "wget"
             wget -q -O plutonium-updater.tar.gz https://github.com/mxve/plutonium-updater.rs/releases/latest/download/plutonium-updater-x86_64-unknown-linux-gnu.tar.gz
             checkAndInstallCommand "tar" "tar"
             tar xf plutonium-updater.tar.gz plutonium-updater
